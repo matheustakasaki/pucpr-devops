@@ -1,22 +1,28 @@
 # Etapa 1: Build da aplicação
 FROM node:20-alpine AS build
 
-# Cria diretório de trabalho no container
 WORKDIR /app
 
-# Copia arquivos para o container
+# Copia os arquivos
 COPY package*.json ./
 COPY vite.config.js ./
+COPY index.html ./
 COPY public ./public
 COPY src ./src
 
-# Instala dependências e gera build
-RUN npm ci && npm run build
 
-# Etapa 2: Servir app com um servidor leve (nginx)
+# Instala as dependências
+RUN npm install
+
+# Gera o build da aplicação
+RUN npm run build
+
+# Servir com NGINX
 FROM nginx:alpine
 
-# Copia o build da etapa anterior para o nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copia config customizada (opcional, senão usa default
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+
