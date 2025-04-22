@@ -1,4 +1,4 @@
-Esse repositório será útil para aprender Devops
+Esse repositório será útil para aprender Devops :)
 
 # React + Vite Configuraton
 
