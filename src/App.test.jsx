@@ -46,4 +46,45 @@ describe('App', () => {
         expect(screen.getByText('Usuário ou senha incorretos!')).toBeInTheDocument();
     });
 
+    it('Alerta quando o email for o correto, mas a senha incorreta', () => {
+        render(<App />);
+
+        fireEvent.change(screen.getByPlaceholderText('E-mail'), {
+            target: { value: 'eduardo.lino@pucpr.br' },
+        });
+
+        fireEvent.change(screen.getByPlaceholderText('Senha'), {
+            target: { value: 'senhaerrada' },
+        });
+
+        fireEvent.click(screen.getByRole('button', { name: /acessar/i }));
+
+        expect(screen.getByText('Usuário ou senha incorretos!')).toBeInTheDocument();
+    });
+
+    it('Exibe erro quando a senha for a correta, mas o email incorreto', () => {
+        render(<App />);
+
+        fireEvent.change(screen.getByPlaceholderText('E-mail'), {
+            target: { value: 'usuario@errado.com' },
+        });
+
+        fireEvent.change(screen.getByPlaceholderText('Senha'), {
+            target: { value: '123456' },
+        });
+
+        fireEvent.click(screen.getByRole('button', { name: /acessar/i }));
+
+        expect(screen.getByText('Usuário ou senha incorretos!')).toBeInTheDocument();
+    });
+
+    it('Mostra erro se os campos estiverem vazios', () => {
+        render(<App />);
+
+        fireEvent.click(screen.getByRole('button', { name: /acessar/i }));
+
+        expect(screen.getByText('Usuário ou senha incorretos!')).toBeInTheDocument();
+    });
+
+
 });
